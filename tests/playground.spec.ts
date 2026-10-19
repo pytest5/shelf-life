@@ -46,3 +46,12 @@ test('challenge 6', async ({ page }) => {
 			.getByRole('button', { name: 'Remove' })
 	).toBeVisible();
 });
+
+test('challenge 7', async ({ page }) => {
+	await goToPlayground(page);
+	await expect(
+		page
+			.getByRole('article', { name: 'Piranesi by Susanna Clarke' })
+			.getByRole('button', { name: 'Rate this book' })
+	).toBeVisible();
+});
