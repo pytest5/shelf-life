@@ -55,3 +55,10 @@ test('challenge 7', async ({ page }) => {
 			.getByRole('button', { name: 'Rate this book' })
 	).toBeVisible();
 });
+
+test('challenge 8', async ({ page }) => {
+	await goToPlayground(page);
+	await expect(page.getByLabel('Author')).toBeVisible(); // 'Author' input field exists, is labelled and is visible
+	await expect(page.getByLabel('Author')).toHaveAccessibleDescription('Last name, first name'); // check 'Author' input field is connected to hint via "aria-describedby"
+	await expect(page.getByText('Last name, first name')).toBeVisible(); // check that hint is visible
+});
