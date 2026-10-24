@@ -62,3 +62,30 @@ test('challenge 8', async ({ page }) => {
 	await expect(page.getByLabel('Author')).toHaveAccessibleDescription('Last name, first name'); // check 'Author' input field is connected to hint via "aria-describedby"
 	await expect(page.getByText('Last name, first name')).toBeVisible(); // check that hint is visible
 });
+
+test('challenge 9', async ({ page }) => {
+	await goToPlayground(page);
+	await expect(page.getByRole('paragraph').filter({ hasText: '42 days.' })).toBeVisible();
+});
+
+test('challenge 10', async ({ page }) => {
+	await goToPlayground(page);
+	await expect(page.getByText('3 of 12 books finished', { exact: true })).toBeVisible();
+});
+
+test('challenge 11', async ({ page }) => {
+	await goToPlayground(page);
+	await expect(
+		page.getByRole('paragraph').filter({ hasText: 'You have 4 books on your shelf right now' })
+	).toBeVisible();
+});
+
+test('challenge 12', async ({ page }) => {
+	await goToPlayground(page);
+	await expect(
+		page
+			.getByRole('table', { name: 'Book ratings' })
+			.getByRole('row')
+			.filter({ hasNot: page.getByRole('columnheader') })
+	).toHaveCount(3);
+});
