@@ -89,3 +89,122 @@ test('challenge 12', async ({ page }) => {
 			.filter({ hasNot: page.getByRole('columnheader') })
 	).toHaveCount(3);
 });
+
+test('challenge 13', async ({ page }) => {
+	await goToPlayground(page);
+	await expect(page.getByRole('list', { name: 'Reading list' }).getByRole('listitem')).toHaveCount(
+		4
+	);
+});
+
+test('challenge 14', async ({ page }) => {
+	await goToPlayground(page);
+	const stationElevenLocator = page.getByText(
+		'Station Eleven is a post-apocalyptic novel by Emily St. John Mandel, published in 2014'
+	);
+	await expect(stationElevenLocator).toBeHidden();
+	await page.getByRole('button', { name: 'Show details' }).click();
+	await expect(stationElevenLocator).toBeVisible();
+});
+
+test('challenge 15', async ({ page }) => {
+	await goToPlayground(page);
+
+	const loadMoreButton = page.getByRole('button', { name: 'Load more' });
+	const loadingButton = page.getByRole('button', { name: 'Loading...' });
+
+	await expect(page.getByRole('list', { name: 'Newly loaded books' })).toBeHidden();
+	await loadMoreButton.click();
+	await expect(loadingButton).toBeVisible();
+	await expect(loadingButton).toBeDisabled();
+	await expect(
+		page.getByRole('list', { name: 'Newly loaded books' }).getByRole('listitem')
+	).toHaveCount(2);
+	await expect(loadMoreButton).toBeVisible();
+	await expect(loadMoreButton).toBeEnabled();
+});
+
+test('challenge 16', async ({ page }) => {
+	await goToPlayground(page);
+
+	const loadingText = page.getByText('Loading...');
+	const loadedText = page.getByText('Content loaded');
+
+	await expect(loadingText).toBeVisible();
+	await expect(loadingText).toBeHidden();
+	await expect(loadedText).toBeVisible();
+});
+
+test('challenge 17', async ({ page }) => {
+	await goToPlayground(page);
+
+	const rateThisBookButton = page.getByRole('button', { name: 'Rate this book' }).last();
+	await rateThisBookButton.click();
+
+	const rateThisBookDialog = page.getByRole('dialog');
+	await expect(rateThisBookDialog).toBeVisible();
+});
+
+test('challenge 18', async ({ page }) => {
+	await goToPlayground(page);
+
+	const rateThisBookButton = page.getByRole('button', { name: 'Rate this book' }).last();
+	await rateThisBookButton.click();
+
+	const rateThisBookDialog = page.getByRole('dialog');
+	await expect(rateThisBookDialog).toBeVisible();
+
+	const fourStarsRadio = rateThisBookDialog.getByRole('radio', { name: '4 stars' });
+	// await expect(fourStarsRadio).toBeVisible(); // not needed click() does this for you
+	await fourStarsRadio.click();
+	await expect(fourStarsRadio).toBeChecked();
+
+	const saveRatingButton = rateThisBookDialog.getByRole('button', { name: 'Save rating' });
+	// await expect(saveRatingButton).toBeVisible(); // not needed click() does this for you
+	// await expect(saveRatingButton).toBeEnabled(); // not needed click() does this for you
+	await saveRatingButton.click();
+
+	await expect(rateThisBookDialog).toBeHidden();
+});
+
+test('challenge 19', async ({ page }) => {
+	await goToPlayground(page);
+
+	const rateThisBookButton = page.getByRole('button', { name: 'Rate this book' }).last();
+	await rateThisBookButton.click();
+
+	const rateThisBookDialog = page.getByRole('dialog');
+	await expect(rateThisBookDialog).toBeVisible();
+
+	const cancelButton = rateThisBookDialog.getByRole('button', { name: 'Cancel' });
+	await cancelButton.click();
+
+	await expect(rateThisBookDialog).toBeHidden();
+});
+
+test('challenge 20', async ({ page }) => {
+	await goToPlayground(page);
+	const unsavedChangesBanner = page.getByRole('alert');
+	await expect(unsavedChangesBanner).toContainText('Unsaved changes will be lost');
+});
+
+test('challenge 21', async ({ page }) => {
+	await goToPlayground(page);
+
+	const progressBar = page.getByRole('progressbar', { name: 'Reading progress' });
+	await expect(progressBar).toHaveAttribute('aria-valuenow', '65');
+});
+
+test('challenge 22', async ({ page }) => {
+	await goToPlayground(page);
+
+	const panelContents = page.getByText('This panel is controlled by the toggle button above');
+	const togglePanelButton = page.getByRole('button', { name: 'Toggle panel' });
+
+	await expect(panelContents).toBeHidden();
+	await expect(togglePanelButton).toHaveAttribute('aria-expanded', 'false');
+	await togglePanelButton.click();
+	await expect(togglePanelButton).toHaveAttribute('aria-expanded', 'true');
+
+	await expect(panelContents).toBeVisible();
+});
